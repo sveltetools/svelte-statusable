@@ -8,17 +8,18 @@ const hasAbortController = typeof AbortController !== 'undefined';
 const defaultRetry = 10000;
 
 function heartbeat({ url, abort, retry, ...options }) {
-
 	if (abort && hasAbortController) {
 		const ac = new AbortController();
 		options.signal = ac.signal;
 		setTimeout(() => ac.abort(), abort);
 	}
 
-	return fetch(url, options).then(res => res.ok).catch(() => false);
+	return fetch(url, options)
+		.then((res) => res.ok)
+		.catch(() => false);
 }
 
-export function statusable({ ping, sse, }) {
+export function statusable({ ping, sse }) {
 	let value = {
 		online: hasNavigator ? navigator.onLine : true,
 		hidden: hasDocument ? document.hidden : false,
@@ -38,15 +39,14 @@ export function statusable({ ping, sse, }) {
 	}
 
 	return readable(value, (set) => {
-
-		if ( ! hasWindow || ! hasNavigator || ! hasDocument) return;
+		if (!hasWindow || !hasNavigator || !hasDocument) return;
 
 		let es;
 		let interval;
-	
+
 		function assign(key, val) {
 			if (value[key] === val) return;
-			set(value = { ...value, [key]: val });
+			set((value = { ...value, [key]: val }));
 		}
 
 		function online() {
