@@ -8,6 +8,8 @@ const hasAbortController = typeof AbortController !== 'undefined';
 const defaultRetry = 10000;
 
 function heartbeat({ url, abort, retry, ...options }) {
+	/*eslint no-unused-vars: "off"*/
+
 	if (abort && hasAbortController) {
 		const ac = new AbortController();
 		options.signal = ac.signal;
