@@ -7,6 +7,11 @@ const hasEventSource = typeof EventSource !== 'undefined';
 const hasAbortController = typeof AbortController !== 'undefined';
 const defaultRetry = 10000;
 
+function setIntervalImmediately(func, interval) {
+	func();
+	return setInterval(func, interval);
+}
+
 function heartbeat({ url, abort, retry, ...options }) {
 	/*eslint no-unused-vars: "off"*/
 
@@ -17,7 +22,7 @@ function heartbeat({ url, abort, retry, ...options }) {
 	}
 
 	return fetch(url, options)
-		.then((res) => res.ok)
+		.then((res) => res.type === 'opaque' || res.ok)
 		.catch(() => false);
 }
 
@@ -33,7 +38,6 @@ export function statusable({ ping, sse }) {
 		ping = {
 			url: ping,
 			method: 'HEAD',
-			mode: 'no-cors',
 			cache: 'no-cache',
 			credentials: 'omit',
 			referrerPolicy: 'no-referrer',
@@ -72,7 +76,7 @@ export function statusable({ ping, sse }) {
 		}
 
 		if (ping) {
-			interval = setInterval(() => {
+			interval = setIntervalImmediately(() => {
 				if (document.hidden || !navigator.onLine) return;
 				heartbeat(ping).then((heartbeat) => assign('heartbeat', heartbeat));
 			}, ping.retry || defaultRetry);

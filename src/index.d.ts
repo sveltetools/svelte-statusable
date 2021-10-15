@@ -17,4 +17,4 @@ export interface Status {
     heartbeat: boolean;
     stream: boolean;
 }
-export declare function statusable<Status>(config: Config): Readable<Status>;
+export declare function statusable(config?: Config): Readable<Status>;
