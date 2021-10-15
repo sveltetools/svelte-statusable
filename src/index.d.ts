@@ -1,15 +1,20 @@
-import type { Readable, Unsubscriber } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 
-export type Format = 'json' | 'raw';
+export interface PingInit extends RequestInit {
+    url: string;
+    retry?: string;
+    abort?: string;
+}
 
 export interface Config {
-    url: string;
-    event?: string;
-    format?: Format;
-    withCredentials?: boolean;
+    ping?: PingInit | string;
+    sse?: string;
 }
-export declare function streamable<T>(
-    config: Config,
-    callback?: (data: T, set?: (value: T) => void) => Unsubscriber | T | void,
-    defaultValue?: T
-): Readable<Promise<T>>;
+
+export interface Status {
+    online: boolean;
+    hidden: boolean;
+    heartbeat: boolean;
+    stream: boolean;
+}
+export declare function statusable<Status>(config: Config): Readable<Status>;

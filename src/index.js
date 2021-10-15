@@ -5,6 +5,7 @@ const hasNavigator = typeof navigator !== 'undefined';
 const hasDocument = typeof document !== 'undefined';
 const hasEventSource = typeof EventSource !== 'undefined';
 const hasAbortController = typeof AbortController !== 'undefined';
+const defaultRetry = 10000;
 
 function heartbeat({ url, abort, retry, ...options }) {
 
@@ -28,8 +29,6 @@ export function statusable({ ping, sse, }) {
 	if (typeof ping === 'string') {
 		ping = {
 			url: ping,
-			abort: 5000,
-			retry: 10000,
 			method: 'HEAD',
 			mode: 'no-cors',
 			cache: 'no-cache',
@@ -74,7 +73,7 @@ export function statusable({ ping, sse, }) {
 			interval = setInterval(() => {
 				if (document.hidden || !navigator.onLine) return;
 				heartbeat(ping).then((heartbeat) => assign('heartbeat', heartbeat));
-			}, ping.retry);
+			}, ping.retry || defaultRetry);
 		}
 
 		window.addEventListener('online', online);

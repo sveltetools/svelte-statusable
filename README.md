@@ -46,6 +46,8 @@ Check it somewhere in you app:
   $: if ($status.hidden) {
     player.pause();
   }
+
+  $: console.log($status); // { online: true, hidden: false, heartbeat: false, stream: false }
 </script>
 ```
 
