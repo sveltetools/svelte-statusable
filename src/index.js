@@ -12,7 +12,7 @@ function setIntervalImmediately(func, interval) {
 	return setInterval(func, interval);
 }
 
-function heartbeat({ url, abort, retry, ...options }) {
+function heartbeat({ url, abort = 0, payload = false, retry, ...options }) {
 	/*eslint no-unused-vars: "off"*/
 
 	if (abort && hasAbortController) {
@@ -22,7 +22,7 @@ function heartbeat({ url, abort, retry, ...options }) {
 	}
 
 	return fetch(url, options)
-		.then((res) => res.type === 'opaque' || res.ok)
+		.then((res) => (payload ? res.json() : res.type === 'opaque' || res.ok))
 		.catch(() => false);
 }
 

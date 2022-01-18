@@ -1,6 +1,6 @@
 {
     "name": "svelte-statusable",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Super tiny, simple to use SvelteJS store to control your application status.",
     "main": "dist/index.js",
     "module": "dist/index.mjs",

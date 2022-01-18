@@ -2,8 +2,9 @@ import type { Readable } from 'svelte/store';
 
 export interface PingInit extends RequestInit {
     url: string;
-    retry?: string;
-    abort?: string;
+    retry?: number;
+    abort?: number;
+    payload?: boolean;
 }
 
 export interface Config {
