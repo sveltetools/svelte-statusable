@@ -94,6 +94,15 @@ Just provide SSE url via `sse` option to control SSE stream status:
 export const status = statusable({
   sse: 'https://mydomain/stream'
 });
+
+// OR
+
+export const status = statusable({
+  sse: {
+    url: 'https://mydomain/stream',
+    withCredentials: true,
+  }
+});
 ```
 
 Check it somewhere in you app:

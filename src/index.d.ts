@@ -7,9 +7,15 @@ export interface PingInit extends RequestInit {
     payload?: boolean;
 }
 
+export interface SseInit {
+    url: string;
+    event?: string;
+    withCredentials?: boolean;
+}
+
 export interface Config {
     ping?: PingInit | string;
-    sse?: string;
+    sse?: SseInit | string;
 }
 
 export interface Status {

@@ -44,6 +44,13 @@ export function statusable({ ping, sse }) {
 		};
 	}
 
+	if (typeof sse === 'string') {
+		sse = {
+			url: sse,
+			withCredentials: false,
+		};
+	}
+
 	return readable(value, (set) => {
 		if (!hasWindow || !hasNavigator || !hasDocument) return;
 
@@ -68,9 +75,13 @@ export function statusable({ ping, sse }) {
 		}
 
 		if (sse && hasEventSource) {
-			es = new EventSource(sse);
+			es = new EventSource(sse.url, { withCredentials: sse.withCredentials });
 			es.addEventListener('open', stream);
 			es.addEventListener('error', stream);
+
+			if (sse.event) {
+				es.addEventListener(sse.event, stream);
+			}
 
 			assign('stream', es.readyState === EventSource.OPEN);
 		}
@@ -94,6 +105,10 @@ export function statusable({ ping, sse }) {
 			if (es) {
 				es.removeEventListener('open', stream);
 				es.removeEventListener('error', stream);
+
+				if (sse.event) {
+					es.removeEventListener(sse.event, stream);
+				}
 			}
 
 			clearInterval(interval);
